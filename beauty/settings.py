@@ -12,10 +12,8 @@ load_dotenv('.env')
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1:8080', '0.0.0.0:8080', 'beauty-a-skripko.amvera.io'])
-# SECRET_KEY = env.str('SECRET_KEY', 'REPLACE_ME')
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = env.bool('DEBUG', False)
-#DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 SECURE_HSTS_SECONDS = 60
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_SSL_REDIRECT = False
