@@ -11,7 +11,7 @@ env_path = load_dotenv(os.path.join(BASE_DIR, '.env'))
 load_dotenv('.env')
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1:8080', '0.0.0.0:8080', 'beaty-a-skripko.amvera.io'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', ['127.0.0.1:8080', '0.0.0.0:8080', 'beauty-a-skripko.amvera.io'])
 # SECRET_KEY = env.str('SECRET_KEY', 'REPLACE_ME')
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&psk#na5l=p3q8_a+-$4w1f^lt3lx1c@d*p4x$ymm_rn7pwb87')
 DEBUG = env.bool('DEBUG', False)
@@ -22,7 +22,7 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_PRELOAD = True
-CSRF_TRUSTED_ORIGINS = ['https://beaty-a-skripko.amvera.io']
+CSRF_TRUSTED_ORIGINS = ['https://beauty-a-skripko.amvera.io']
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
