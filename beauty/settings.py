@@ -94,7 +94,7 @@ USE_TZ = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'NAME': 'data/db.sqlite3',
     }
 }
 if 'DATABASE_URL' in os.environ:
