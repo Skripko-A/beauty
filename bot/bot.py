@@ -30,11 +30,11 @@ ADMIN_ID = os.getenv('ADMIN_ID')
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 # Меню больших кнопок
 big_keyboard = ["Записаться", "Мои записи", "Салоны", "Мастера", "Услуги", "Администратор"]
 
-admin_menu_keyboard = ["Записать клиента", "Рассылка сообщений","Записи клиентов"]
+admin_menu_keyboard = ["Записать клиента", "Рассылка сообщений", "Записи клиентов"]
+
 
 # Функция для проверки пароля и вызова меню администратора
 
@@ -124,7 +124,8 @@ def handle_admin_phone_input(update: Update, context: CallbackContext):
     phone_number = update.message.text
     try:
         customer = Customer.objects.get(phone=phone_number)
-        context.bot.send_message(chat_id=update.message.chat_id, text=f"Клиент найден: {customer.first_name} {customer.last_name}")
+        context.bot.send_message(chat_id=update.message.chat_id,
+                                 text=f"Клиент найден: {customer.first_name} {customer.last_name}")
         # Вывод меню по записи
         show_services_menu(update, context)
         return 'service'
@@ -133,11 +134,13 @@ def handle_admin_phone_input(update: Update, context: CallbackContext):
         context.user_data['phone_number'] = phone_number
         return 'first_name'
 
+
 def handle_admin_first_name_input(update: Update, context: CallbackContext):
     first_name = update.message.text
     context.user_data['first_name'] = first_name
     context.bot.send_message(chat_id=update.message.chat_id, text="Введите фамилию клиента:")
     return 'last_name'
+
 
 def handle_admin_last_name_input(update: Update, context: CallbackContext):
     last_name = update.message.text
@@ -155,7 +158,8 @@ def show_admin_client_menu(update: Update, context: CallbackContext):
     message = update.message or update.callback_query.message
     if message:
         keyboard = ReplyKeyboardMarkup(
-            [["Выбрать салон", "Выбрать услугу"], ["Выбрать мастера", "Выбрать дату"], ["Выбрать время", "Подтвердить"]],
+            [["Выбрать салон", "Выбрать услугу"], ["Выбрать мастера", "Выбрать дату"],
+             ["Выбрать время", "Подтвердить"]],
             resize_keyboard=True
         )
         message.reply_text('Выберите действие', reply_markup=keyboard)
@@ -225,6 +229,7 @@ def admin_client_conversation_handler():
         fallbacks=[CommandHandler('cancel', cancel_booking)]
     )
 
+
 def handle_admin_client_start(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.message.chat_id, text="Введите номер телефона клиента:")
     return 'phone_number'
@@ -245,7 +250,7 @@ def send_agreement_document(chat_id, bot):
 # Функция поделиться номером телефона
 def request_phone_number(update: Update, context: CallbackContext, chat_id):
     keyboard = ReplyKeyboardMarkup([[KeyboardButton("Поделиться номером телефона", request_contact=True)]],
-                                   one_time_keyboard=True, resize_keyboard=True,)
+                                   one_time_keyboard=True, resize_keyboard=True, )
     context.bot.send_message(chat_id=chat_id, text="Пожалуйста, поделитесь своим номером телефона для завершения "
                                                    "регистрации.",
                              reply_markup=keyboard)
@@ -357,7 +362,7 @@ def show_terms(update: Update, context: CallbackContext, chat_id: object):
     send_agreement_document(chat_id, context.bot)
     keyboard = InlineKeyboardMarkup([
         [InlineKeyboardButton("Соглашаюсь", callback_data='agree'),
-        InlineKeyboardButton("Отказываюсь", callback_data='decline')],
+         InlineKeyboardButton("Отказываюсь", callback_data='decline')],
     ])
     update.effective_message.reply_text(
         'Для обработки ваших записей на наши услуги, \ngожалуйста, подтвердите своё согласие на обработку данных:',
@@ -371,12 +376,12 @@ def handle_agree(update: Update, context: CallbackContext):
     chat_id = query.message.chat_id
     request_phone_number(update, context, chat_id)
 
+
 def handle_decline(update: Update, context: CallbackContext):
     query = update.callback_query
     query.answer()
     chat_id = query.message.chat_id
     query.message.reply_text('Вы отказались от записи.')
-
 
 
 # выводит список доступных салонов
@@ -789,7 +794,8 @@ def button(update: Update, context: CallbackContext):
 
 # Создаем обработчик разговора
 conversation_handler = ConversationHandler(
-    entry_points=[CommandHandler('start', show_main_menu), MessageHandler(Filters.text("Записать клиента"), handle_admin_choice)],
+    entry_points=[CommandHandler('start', show_main_menu),
+                  MessageHandler(Filters.text("Записать клиента"), handle_admin_choice)],
     states={
         MAIN_MENU: [CallbackQueryHandler(show_main_menu,
                                          pattern='^(select_salon|select_service|select_staff|select_date|select_time)$')],
@@ -797,7 +803,6 @@ conversation_handler = ConversationHandler(
     },
     fallbacks=[CommandHandler('cancel', cancel_booking)]
 )
-
 
 admin_conversation_handler = ConversationHandler(
     entry_points=[MessageHandler(Filters.text("Записать клиента"), handle_admin_choice)],
@@ -834,7 +839,6 @@ def main():
     dp.add_handler(admin_conversation_handler)
     # dp.add_handler(CommandHandler("remind_tomorrow", remind_tomorrow_command))
     dp.add_handler(conversation_handler)
-
 
     updater.start_polling()
     updater.idle()
