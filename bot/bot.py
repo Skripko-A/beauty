@@ -16,7 +16,7 @@ from django.core.management import execute_from_command_line
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'beauty.settings')
 django.setup()
 
-from property.models import Customer, Service, Staff, Salon, Schedule, Appointment
+from beauty.models import Customer, Service, Staff, Salon, Schedule, Appointment
 
 MAIN_MENU = 1
 GET_PHONE = 2
